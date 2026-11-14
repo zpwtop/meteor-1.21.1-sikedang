@@ -1,8 +1,7 @@
-# Release conventions requested by the user
+# Project instructions
 
-Use `meteor-1.21.1-死氪党-X.Y.Z.jar` for production JAR filenames.
-Version numbers are three components, not decimal arithmetic.
-For new features increment the middle component and reset the patch component: 1.0.0 -> 1.1.0, 1.1.3 -> 1.2.0.
-For bug fixes increment the last component: 1.0.0 -> 1.0.1, 1.1.0 -> 1.1.1.
-Keep fabric.mod.json version, build output filename, README and validation record consistent.
-Current release: 1.0.0 (the user explicitly reset the ten-module release baseline to 1.0.0). Preserve the .jar extension.
+This is the separately exported Minecraft 1.21.4 source package, addon baseline 1.0.0.
+Use `meteor-1.21.4-死氪党-X.Y.Z.jar` for production filenames.
+Build with `python build.py --test`. Only this Minecraft target is included.
+Feature updates increment the middle component; bug fixes increment the last component.
+The parent project continues to maintain 1.21.1 and 1.21.4 together; release changes should be applied to both in that parent project.

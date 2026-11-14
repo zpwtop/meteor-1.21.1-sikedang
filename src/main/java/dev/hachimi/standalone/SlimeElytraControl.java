@@ -34,7 +34,7 @@ public final class SlimeElytraControl extends HachimiModule {
         restore();
         if(rocketTimer>0)rocketTimer--;
         if(!ready())return;
-        if(!mc.player.isFallFlying()){
+        if(!GameCompat.isGliding(mc.player)){
             if(airborne&&mc.player.isOnGround()&&landDisable.get())toggle();
             return;
         }

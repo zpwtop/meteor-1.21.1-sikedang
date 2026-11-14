@@ -23,7 +23,7 @@ import net.minecraft.world.GameMode;
 
 public final class SmokeAddon extends MeteorAddon {
     private int tick,elytraTicks;
-    private boolean failed;
+    private boolean failed,maceObserved;
     private final BlockPos target=new BlockPos(2,91,0);
     private EntityShader previous;
     @Override public String getPackage(){return "dev.hachimi.test";}
@@ -35,8 +35,16 @@ public final class SmokeAddon extends MeteorAddon {
         Config.get().customFont.set(false);
         Class<?>[] types={HachimiCrystal.class,HachimiSelfTrap.class,HachimiSurround.class,HachimiMace.class,
             HachimiFakeFly.class,HachimiPotion.class,SlimeArmorFly.class,SlimeElytraControl.class,HachimiPacketMine.class,HachimiShaders.class};
-        for(Class<?> type:types)check(Modules.get().get((Class)type)!=null,"module missing "+type.getSimpleName());
+        for(Class<?> type:types) {
+            var module=Modules.get().get((Class)type);
+            check(module!=null,"module missing "+type.getSimpleName());
+            if(module.isActive())module.toggle();
+        }
         MeteorClient.LOG.info("HACHIMI_ACCEPTANCE: ten distinct production modules registered");
+    }
+    @EventHandler(priority=-100) private void sent(meteordevelopment.meteorclient.events.packets.PacketEvent.Send event){
+        if(!event.isCancelled()&&event.packet instanceof net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket
+            &&MeteorClient.mc.player.getMainHandStack().isOf(Items.MACE))maceObserved=true;
     }
     @EventHandler(priority=0) private void pre(TickEvent.Pre event){
         if(tick>=180&&tick<230&&Modules.get().isActive(SlimeArmorFly.class)&&MeteorClient.mc.player.getEquippedStack(EquipmentSlot.CHEST).isOf(Items.ELYTRA))elytraTicks++;
@@ -58,15 +66,16 @@ public final class SmokeAddon extends MeteorAddon {
                 }
                 world.setTimeOfDay(6000);
                 player.changeGameMode(GameMode.SURVIVAL);
-                player.teleport(world,0.5,91,0.5,0,0);
+                TestCompat.teleport(player,world);
                 player.getInventory().clear();
                 player.getInventory().setStack(0,new ItemStack(Items.STICK));
                 player.getInventory().setStack(2,new ItemStack(Items.DIAMOND_PICKAXE));
                 player.getInventory().setStack(24,new ItemStack(Items.ELYTRA));
+                player.getInventory().setStack(5,new ItemStack(Items.MACE));
                 player.equipStack(EquipmentSlot.CHEST,new ItemStack(Items.NETHERITE_CHESTPLATE));
                 player.currentScreenHandler.sendContentUpdates();
                 world.setBlockState(target,Blocks.STONE.getDefaultState());
-                var pig=EntityType.PIG.create(world);pig.refreshPositionAndAngles(1.5,91,3.5,0,0);pig.setAiDisabled(true);world.spawnEntity(pig);
+                var pig=new net.minecraft.entity.passive.PigEntity(EntityType.PIG,world);pig.refreshPositionAndAngles(1.5,91,3.5,0,0);pig.setAiDisabled(true);world.spawnEntity(pig);
             });
         }
         if(tick==80){
@@ -89,6 +98,19 @@ public final class SmokeAddon extends MeteorAddon {
             shader.toggle();check(shader.isActive(),"GPU shader did not activate");
             mc.player.setYaw(-20);mc.player.setPitch(5);
             MeteorClient.LOG.info("HACHIMI_ACCEPTANCE: GPU rainbow/dots/glow rendering active");
+        }
+        if(tick==160){
+            net.minecraft.entity.Entity pig=null;
+            for(var entity:mc.world.getEntities())if(entity instanceof net.minecraft.entity.passive.PigEntity){pig=entity;break;}
+            check(pig!=null,"test pig missing");
+            var packet=net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket.attack(pig,false);
+            check(GameCompat.attackTarget(packet)==pig,"attack packet target adapter failed");
+            var mace=Modules.get().get(HachimiMace.class);mace.toggle();maceObserved=false;
+            mc.getNetworkHandler().sendPacket(packet);
+            check(maceObserved,"attack packet was not sent while holding mace");
+            check(mc.player.getInventory().selectedSlot==0,"mace did not restore selected slot");
+            mace.toggle();
+            MeteorClient.LOG.info("HACHIMI_ACCEPTANCE: PASS mace target lookup and attack-before-restore switch");
         }
         if(tick==180){
             Modules.get().get(SlimeArmorFly.class).toggle();

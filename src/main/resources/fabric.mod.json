@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "hachimi-meteor-standalone",
+  "version": "1.0.0",
+  "name": "Hachimi Meteor Standalone",
+  "description": "Ten independent Hachimi and Slime modules for Meteor Client 0.5.8 / Minecraft 1.21.1.",
+  "authors": [
+    "Hachimi Addon contributors"
+  ],
+  "environment": "client",
+  "entrypoints": {
+    "meteor": [
+      "dev.hachimi.standalone.HachimiAddon"
+    ]
+  },
+  "depends": {
+    "java": ">=21",
+    "minecraft": "1.21.1",
+    "fabricloader": ">=0.15.11",
+    "meteor-client": "0.5.8"
+  },
+  "custom": {
+    "meteor-client:color": "255,170,70"
+  },
+  "mixins": [
+    "hachimi-standalone.mixins.json"
+  ]
+}

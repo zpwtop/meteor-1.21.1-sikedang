@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "dev.hachimi.standalone.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "ClientWorldInvoker"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

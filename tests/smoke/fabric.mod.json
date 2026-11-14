@@ -1,0 +1,1 @@
+{"schemaVersion": 1, "id": "hachimi-local-smoke-test", "version": "1.1", "name": "Local acceptance test (excluded from delivery)", "authors": ["Local test harness"], "environment": "client", "entrypoints": {"meteor": ["dev.hachimi.test.SmokeAddon"]}, "depends": {"hachimi-meteor-standalone": "*", "meteor-client": "*"}}

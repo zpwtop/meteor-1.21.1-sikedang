@@ -21,7 +21,7 @@ public final class HachimiFakeFly extends HachimiModule {
     private boolean warned;
     private net.minecraft.client.network.ClientPlayerEntity gravityPlayer;
     private boolean previousNoGravity;
-    public HachimiFakeFly() { super("hachimi假飞", "临时穿鞘翅请求滑翔后恢复胸甲，通过输入控制移动；服务器可能拒绝。"); }
+    public HachimiFakeFly() { super("假飞", "临时穿鞘翅请求滑翔后恢复胸甲，通过输入控制移动；服务器可能拒绝。"); }
     @Override public void onActivate() {
         super.onActivate(); lastRocket = 0; warned = false;
         gravityPlayer = mc.player;

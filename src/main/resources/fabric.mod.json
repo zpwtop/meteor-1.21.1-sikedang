@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
   "id": "hachimi-meteor-standalone",
-  "version": "1.0.0",
-  "name": "Hachimi Meteor Standalone",
-  "description": "Ten independent Hachimi and Slime modules for Minecraft 1.21.4 / Meteor 1.21.4-42.",
+  "version": "1.3.0",
+  "name": "死氪党 Meteor Addon",
+  "description": "Thirteen independent Meteor modules including Jumping Tiger elytra hopping.",
   "authors": [
-    "Hachimi Addon contributors"
+    "死氪党 addon contributors"
   ],
   "environment": "client",
   "entrypoints": {

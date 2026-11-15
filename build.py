@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build either Minecraft target or release both together from the same source tree."""
+"""Build the Minecraft 1.21.4 release from this standalone source package."""
 import argparse,concurrent.futures,hashlib,importlib.util,json,os,pathlib,shutil,subprocess,urllib.request,zipfile
 ROOT=pathlib.Path(__file__).resolve().parent
 RELEASE=json.loads((ROOT/'release.json').read_text())
@@ -64,13 +64,13 @@ def build(mc,meteor_override=None):
  if args.test:
   tests=work/'tests'
   if tests.exists():shutil.rmtree(tests)
-  pure=['Rules.java','Transactions.java','ChestSession.java','FlightMath.java','MiningCycle.java']
-  subprocess.run(compiler+['-d',str(tests)]+[str(ROOT/'src/main/java/dev/hachimi/standalone'/n) for n in pure]+[str(ROOT/'tests/LogicTest.java')],check=True)
+  pure=['Rules.java','Transactions.java','ChestSession.java','FlightMath.java','MiningCycle.java','ModuleNames.java','ElytraResetClock.java','ElytraFlags.java','JumpDirection.java']
+  subprocess.run(compiler+['-d',str(tests)]+[str(ROOT/'src/main/java/dev/hachimi/standalone'/n) for n in pure]+[str(ROOT/'src/main/java/dev/hachimi/standalone/city'/n) for n in ['CityArea.java','CityLocation.java','CityResults.java']]+[str(ROOT/'tests/LogicTest.java')],check=True)
   subprocess.run(['java','-cp',str(tests),'dev.hachimi.standalone.LogicTest'],check=True)
  named=work/'named.jar'
  mod=json.loads((ROOT/'src/main/resources/fabric.mod.json').read_text())
  mod['version']=RELEASE['version'];mod['depends']['minecraft']=mc;mod['depends']['fabricloader']=cfg['loader'];mod['depends']['meteor-client']=cfg['meteor_version']
- mod['description']=f'Ten independent Hachimi and Slime modules for Minecraft {mc} / Meteor {cfg["meteor_version"]}.'
+ mod['description']=f'Thirteen independent modules for Minecraft {mc} / Meteor {cfg["meteor_version"]}.'
  with zipfile.ZipFile(named,'w',zipfile.ZIP_DEFLATED) as z:
   z.writestr('META-INF/MANIFEST.MF','Manifest-Version: 1.0\n\n')
   for base in [classes,ROOT/'src/main/resources']:

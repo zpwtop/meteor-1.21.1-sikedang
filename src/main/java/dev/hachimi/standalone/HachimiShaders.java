@@ -34,7 +34,7 @@ public final class HachimiShaders extends HachimiModule {
     private final Setting<Boolean> projectiles=bool("projectiles","渲染投射物。",true);
     private Effect effect;
     private EntityShader previous;
-    public HachimiShaders(){super("hachimi着色器","参考 Hachimi 的实体着色：纯色、渐变、彩虹、点阵、描边与发光。");}
+    public HachimiShaders(){super("着色器","参考 Hachimi 的实体着色：纯色、渐变、彩虹、点阵、描边与发光。");}
     @Override public void onActivate(){
         super.onActivate();
         try{

@@ -23,7 +23,7 @@ public final class SlimeElytraControl extends HachimiModule {
     private float yaw,pitch;
     private boolean gravity,changed,airborne;
     private int rocketTimer;
-    public SlimeElytraControl(){super(HachimiAddon.SLIME_CATEGORY,"slime简易鞘翅控制","参考 SlimefunHelper 简易控制；可与 slime甲飞 同时使用，也可穿鞘翅使用。");}
+    public SlimeElytraControl(){super(HachimiAddon.SLIME_CATEGORY,"简易鞘翅控制","参考 SlimefunHelper 简易控制；可与甲飞 同时使用，也可穿鞘翅使用。");}
     @Override public void onActivate(){super.onActivate();airborne=false;rocketTimer=0;}
     @Override public void onDeactivate(){restore();super.onDeactivate();}
     private void restore(){

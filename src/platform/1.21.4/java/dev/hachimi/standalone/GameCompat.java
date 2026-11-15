@@ -22,4 +22,14 @@ public final class GameCompat {
     public static Entity attackTarget(PlayerInteractEntityC2SPacket packet) {
         return ((IPlayerInteractEntityC2SPacket)packet).meteor$getEntity();
     }
+    public static <T> net.minecraft.registry.RegistryWrapper.Impl<T> worldgenRegistry(net.minecraft.registry.RegistryWrapper.WrapperLookup lookup, net.minecraft.registry.RegistryKey<? extends net.minecraft.registry.Registry<T>> key) {
+        return lookup.getOrThrow(key);
+    }
+    public static boolean tryStartGliding(net.minecraft.client.network.ClientPlayerEntity player) { return player.checkGliding(); }
+    public static Runnable jumpInput(net.minecraft.client.input.Input input,boolean jump,boolean sneak) {
+        var old=input.playerInput;float forward=input.movementForward,sideways=input.movementSideways;
+        input.playerInput=new net.minecraft.util.PlayerInput(true,false,false,false,jump,sneak,true);
+        input.movementForward=1;input.movementSideways=0;
+        return ()->{input.playerInput=old;input.movementForward=forward;input.movementSideways=sideways;};
+    }
 }

@@ -16,7 +16,7 @@ public final class SlimeArmorFly extends HachimiModule {
     private ChestSession session;
     private boolean airborne,warned;
     private int timer;
-    public SlimeArmorFly(){super(HachimiAddon.SLIME_CATEGORY,"slime甲飞","参考 SlimefunHelper TICK 甲飞：玩家 tick 中临时穿鞘翅，之后恢复胸甲。");}
+    public SlimeArmorFly(){super(HachimiAddon.SLIME_CATEGORY,"甲飞","参考 SlimefunHelper TICK 甲飞：玩家 tick 中临时穿鞘翅，之后恢复胸甲。");}
     @Override public void onActivate(){super.onActivate();airborne=false;warned=false;timer=0;}
     @Override public void onDeactivate(){restore();super.onDeactivate();if(ready())GameCompat.stopGliding(mc.player);}
     private void restore(){if(session!=null){ChestSession old=session;session=null;old.close();}}

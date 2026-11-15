@@ -14,7 +14,7 @@ public final class HachimiMace extends HachimiModule {
     private final Setting<Boolean> fallingOnly = bool("falling-only", "只在下落时切换。", false);
     private boolean sending;
     private long lastSwap;
-    public HachimiMace() { super("hachimi重锤秒切", "攻击包发送前切到重锤，发送后立即恢复；对应原版切换模式。"); }
+    public HachimiMace() { super("重锤秒切", "攻击包发送前切到重锤，发送后立即恢复；对应原版切换模式。"); }
     private static boolean isAttack(PlayerInteractEntityC2SPacket packet) {
         boolean[] attack = {false};
         packet.handle(new PlayerInteractEntityC2SPacket.Handler() {

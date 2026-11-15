@@ -18,12 +18,16 @@ public final class Transactions {
             try { action.run(); } finally { swap.accept(source, selected); }
         }
     }
+    public static void withChestSwap(int slot, IntConsumer chestSwap, Runnable action) {
+        if(slot<0||slot>8)throw new IllegalArgumentException("Not a hotbar slot");
+        chestSwap.accept(slot);
+        try { action.run(); } finally { chestSwap.accept(slot); }
+    }
     public static void withElytra(int source, IntConsumer chestSwap, BiConsumer<Integer,Integer> swap, Runnable action) {
         if (source == -1) { action.run(); return; }
         Rules.screenSlot(source);
         if (source < 9) {
-            chestSwap.accept(source);
-            try { action.run(); } finally { chestSwap.accept(source); }
+            withChestSwap(source,chestSwap,action);
         } else {
             swap.accept(source,8);
             try {

@@ -3,7 +3,11 @@
   "package": "dev.hachimi.standalone.mixin",
   "compatibilityLevel": "JAVA_21",
   "client": [
-    "ClientWorldInvoker"
+    "ClientWorldInvoker",
+    "DurableElytraMixin",
+    "ModuleNameMigrationMixin",
+    "DurableElytraNetworkMixin",
+    "JumpInputMixin"
   ],
   "injectors": {
     "defaultRequire": 1

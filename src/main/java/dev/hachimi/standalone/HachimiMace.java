@@ -2,7 +2,6 @@ package dev.hachimi.standalone;
 
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.settings.Setting;
-import meteordevelopment.meteorclient.mixininterface.IPlayerInteractEntityC2SPacket;
 import meteordevelopment.meteorclient.utils.player.InvUtils;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.entity.decoration.EndCrystalEntity;
@@ -15,7 +14,7 @@ public final class HachimiMace extends HachimiModule {
     private final Setting<Boolean> fallingOnly = bool("falling-only", "只在下落时切换。", false);
     private boolean sending;
     private long lastSwap;
-    public HachimiMace() { super("hachimi重锤秒切", "攻击包发送前切到重锤，发送后立即恢复；对应原版切换模式。"); }
+    public HachimiMace() { super("重锤秒切", "攻击包发送前切到重锤，发送后立即恢复；对应原版切换模式。"); }
     private static boolean isAttack(PlayerInteractEntityC2SPacket packet) {
         boolean[] attack = {false};
         packet.handle(new PlayerInteractEntityC2SPacket.Handler() {
@@ -28,9 +27,9 @@ public final class HachimiMace extends HachimiModule {
     @Override public void onActivate() { super.onActivate(); lastSwap = 0; sending = false; }
     @EventHandler(priority=100) private void send(PacketEvent.Send event) {
         if (event.isCancelled() || !inventoryReady() || sending || !(event.packet instanceof PlayerInteractEntityC2SPacket packet)) return;
-        var access = (IPlayerInteractEntityC2SPacket)packet;
+        var target = GameCompat.attackTarget(packet);
         if (!isAttack(packet)) return;
-        if (access.getEntity() == null || (ignoreCrystal.get() && access.getEntity() instanceof EndCrystalEntity)) return;
+        if (target == null || (ignoreCrystal.get() && target instanceof EndCrystalEntity)) return;
         if (fallingOnly.get() && (mc.player.isOnGround() || mc.player.getVelocity().y >= 0)) return;
         long now = System.nanoTime();
         if (lastSwap != 0 && now-lastSwap < delay.get()*1_000_000_000L) return;

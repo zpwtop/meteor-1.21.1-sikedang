@@ -31,7 +31,7 @@ public final class HachimiPacketMine extends HachimiModule {
         MiningCycle cycle;boolean started,pending,wasAir;int airTicks;
         Task(BlockPos pos,Direction side,BlockState state,ClientWorld world,double threshold){this.pos=pos;this.side=side;this.state=state;this.world=world;cycle=new MiningCycle(threshold);}
     }
-    public HachimiPacketMine(){super("hachimi发包挖掘","参考 Hachimi SpeedMine 的单目标发包挖掘；松开鼠标后继续等待完成。");}
+    public HachimiPacketMine(){super("发包挖掘","参考 Hachimi SpeedMine 的单目标发包挖掘；松开鼠标后继续等待完成。");}
     @Override public void onActivate(){super.onActivate();task=null;}
     @Override public void onDeactivate(){clear(true);super.onDeactivate();}
     @EventHandler(priority=100) private void start(StartBreakingBlockEvent event){

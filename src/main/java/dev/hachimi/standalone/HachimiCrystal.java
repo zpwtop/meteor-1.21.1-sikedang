@@ -34,7 +34,7 @@ public final class HachimiCrystal extends HachimiModule {
     private final Setting<Boolean> protectFriends = bool("protect-friends", "同样限制对 Meteor 好友造成的爆炸伤害。", true);
     private int placeTimer, breakTimer;
     private boolean pending;
-    public HachimiCrystal() { super("hachimi自动水晶", "独立自动水晶：选择伤害位置、放置、攻击和自身伤害限制。"); }
+    public HachimiCrystal() { super("自动水晶", "独立自动水晶：选择伤害位置、放置、攻击和自身伤害限制。"); }
     @Override public void onActivate() { super.onActivate(); placeTimer = breakTimer = 0; pending = false; }
     @Override public void onDeactivate() { super.onDeactivate(); pending = false; }
     @EventHandler private void tick(TickEvent.Pre event) {

@@ -23,7 +23,7 @@ public final class HachimiPotion extends HachimiModule {
     private final Setting<Integer> refresh = integer("refresh-ticks", "效果剩余少于这些 tick 时补药；0 为结束后补。", 0, 0, 200);
     private long lastThrow;
     private boolean pending;
-    public HachimiPotion() { super("hachimi自动药水", "独立自动向脚下投掷速度、抗性、力量喷溅药水。"); }
+    public HachimiPotion() { super("自动药水", "独立自动向脚下投掷速度、抗性、力量喷溅药水。"); }
     @Override public void onActivate() { super.onActivate(); pending = false; lastThrow = 0; }
     @Override public void onDeactivate() { super.onDeactivate(); pending = false; }
     @EventHandler private void tick(TickEvent.Pre event) {

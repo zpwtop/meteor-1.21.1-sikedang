@@ -21,7 +21,7 @@ public final class HachimiFakeFly extends HachimiModule {
     private boolean warned;
     private net.minecraft.client.network.ClientPlayerEntity gravityPlayer;
     private boolean previousNoGravity;
-    public HachimiFakeFly() { super("hachimi假飞", "临时穿鞘翅请求滑翔后恢复胸甲，通过输入控制移动；服务器可能拒绝。"); }
+    public HachimiFakeFly() { super("假飞", "临时穿鞘翅请求滑翔后恢复胸甲，通过输入控制移动；服务器可能拒绝。"); }
     @Override public void onActivate() {
         super.onActivate(); lastRocket = 0; warned = false;
         gravityPlayer = mc.player;
@@ -33,7 +33,7 @@ public final class HachimiFakeFly extends HachimiModule {
     @Override public void onDeactivate() {
         super.onDeactivate();
         restoreGravity();
-        if (ready()) { mc.player.stopFallFlying(); mc.player.setVelocity(0,0,0); }
+        if (ready()) { GameCompat.stopGliding(mc.player); mc.player.setVelocity(0,0,0); }
     }
     @EventHandler(priority=-50) private void tick(TickEvent.Pre event) {
         if (!inventoryReady() || mc.player.isTouchingWater() || mc.player.hasVehicle() || mc.player.isClimbing()) { restoreGravity(); return; }
@@ -49,7 +49,7 @@ public final class HachimiFakeFly extends HachimiModule {
         mc.player.setNoGravity(true);
         // Player inventory only: chest screen slot 6, temporary hotbar slot 8.
         Transactions.withElytra(equipped ? -1 : elytra, this::chestSwap, this::swapMain, this::requestFlight);
-        mc.player.stopFallFlying(); // Keep local movement controls instead of the vanilla glide controller.
+        GameCompat.stopGliding(mc.player); // Keep local movement controls instead of the vanilla glide controller.
         double forward = (mc.options.forwardKey.isPressed()?1:0)-(mc.options.backKey.isPressed()?1:0);
         double strafe = (mc.options.leftKey.isPressed()?1:0)-(mc.options.rightKey.isPressed()?1:0);
         double[] horizontal = Rules.motion(mc.player.getYaw(),forward,strafe,speed.get());
@@ -59,7 +59,7 @@ public final class HachimiFakeFly extends HachimiModule {
     }
     private void requestFlight() {
         mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player,ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-        mc.player.startFallFlying();
+        GameCompat.startGliding(mc.player);
         if (autoBoost.get() && (lastRocket == 0 || System.nanoTime()-lastRocket >= rocketDelay.get()*1_000_000_000L)) {
             var rocket = meteordevelopment.meteorclient.utils.player.InvUtils.findInHotbar(Items.FIREWORK_ROCKET);
             if (rocket.found()) {

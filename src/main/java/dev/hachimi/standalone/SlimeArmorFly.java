@@ -4,7 +4,6 @@ import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
@@ -17,9 +16,9 @@ public final class SlimeArmorFly extends HachimiModule {
     private ChestSession session;
     private boolean airborne,warned;
     private int timer;
-    public SlimeArmorFly(){super(HachimiAddon.SLIME_CATEGORY,"slime甲飞","参考 SlimefunHelper TICK 甲飞：玩家 tick 中临时穿鞘翅，之后恢复胸甲。");}
+    public SlimeArmorFly(){super(HachimiAddon.SLIME_CATEGORY,"甲飞","参考 SlimefunHelper TICK 甲飞：玩家 tick 中临时穿鞘翅，之后恢复胸甲。");}
     @Override public void onActivate(){super.onActivate();airborne=false;warned=false;timer=0;}
-    @Override public void onDeactivate(){restore();super.onDeactivate();if(ready())mc.player.stopFallFlying();}
+    @Override public void onDeactivate(){restore();super.onDeactivate();if(ready())GameCompat.stopGliding(mc.player);}
     private void restore(){if(session!=null){ChestSession old=session;session=null;old.close();}}
     @EventHandler(priority=250) private void pre(TickEvent.Pre event){
         restore();
@@ -30,7 +29,7 @@ public final class SlimeArmorFly extends HachimiModule {
             return;
         }
         ItemStack chest=mc.player.getEquippedStack(EquipmentSlot.CHEST);
-        if(!(chest.getItem() instanceof ArmorItem armor)||armor.getSlotType()!=EquipmentSlot.CHEST){
+        if(!GameCompat.isChestArmor(chest)){
             if(!warned){warning("甲飞需要先穿好胸甲，并把一件有耐久的鞘翅放在主背包或快捷栏。");warned=true;}
             return;
         }
@@ -43,11 +42,11 @@ public final class SlimeArmorFly extends HachimiModule {
             hotbar->{if(mc.player==player&&mc.world==world)mc.interactionManager.clickSlot(player.playerScreenHandler.syncId,6,hotbar,SlotActionType.SWAP,player);},
             (source,hotbar)->{if(mc.player==player&&mc.world==world)mc.interactionManager.clickSlot(player.playerScreenHandler.syncId,Rules.screenSlot(source),hotbar,SlotActionType.SWAP,player);});
         try{
-            if(timer--<=0||!mc.player.isFallFlying()){
+            if(timer--<=0||!GameCompat.isGliding(mc.player)){
                 mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player,ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                 timer=requestDelay.get()-1;
             }
-            mc.player.startFallFlying();airborne=true;
+            GameCompat.startGliding(mc.player);airborne=true;
         }catch(RuntimeException e){restore();throw e;}
     }
     @EventHandler(priority=-250) private void post(TickEvent.Post event){restore();}

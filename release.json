@@ -1,0 +1,15 @@
+{
+  "version": "1.3.0",
+  "artifact": "meteor-{minecraft}-死氪党-{version}.jar",
+  "targets": {
+    "1.21.1": {
+      "meteor_version": "0.5.8",
+      "meteor_url": "https://maven.meteordev.org/releases/meteordevelopment/meteor-client/0.5.8/meteor-client-0.5.8.jar",
+      "meteor_sha256": "090ad8f02273a67eca753ef37ccee2256e4dd3d715501ed75433ec8f57d7c5e9",
+      "loader": ">=0.15.11",
+      "yarn": "1.21.1+build.3",
+      "yarn_sha256": "4ec570889585cb958b7d3c9dd94ce4064b16ab797dffec152bc8486c59a4010b",
+      "intermediary_sha256": "e8bd6a4c39e235ee2dc73063558610775c72a2572fa0c6b32915b149074012a6"
+    }
+  }
+}
